@@ -8,7 +8,11 @@ console.log('Hello Noteful!');
 const express = require('express');
 
 // Import data
-const data = require('./db/notes');
+// Simple In-Memory DataBase
+const data = require('./db/notes'); // Database
+const simDB = require('./db/simDB');  // Database methods
+const notes = simDB.initialize(data);
+
 
 // Import the PORT module
 const { PORT } = require('./config');
@@ -22,22 +26,28 @@ app.use(logger);
 
 // Create a GET endpoint which accepts an ID
 // NORMAL ROUTES
-app.get('/api/notes', (req, res) => {
-  const searchTerm = req.query.searchTerm;
-  const filteredData = data.filter(item => item.title.includes(searchTerm));
-  res.json(filteredData);
+app.get('/api/notes', (req, res, next) => {
+  const { searchTerm } = req.query;
+  notes.filter(searchTerm, (err, list) => {
+    if (searchTerm === undefined || err) {
+      return next(err); // goes to error handler
+    }
+    res.json(list); // responds with filtered array
+  });
 });
 
-app.get('/api/notes/:id', (req, res) => {
-  const id = req.params.id;
-  const item = data[id]; 
-  
-  data.find(item => item.id === id);
-  res.json(item);
+app.get('/api/notes/:id', (req, res, next) => {
+  const { id } = req.params;
+  notes.find(id, (err, item) => {
+    if (item === undefined || err) { 
+      return next(err);
+    }
+    res.json(item); 
+  });
 });
 
 // app.get('/boom', (req, res, next) => {
-//   throw new Error('Boom!!');
+//   throw new Error('Boom!');
 // });
 
 // ERROR HANDLING
