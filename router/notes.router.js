@@ -93,23 +93,27 @@ router.post('/notes', (req, res, next) => {
   });
 });
 
-
 // ==== DELETE =================================================
+router.delete('/notes/:id', (req, res, next) => {
+  const id = req.params.id;
+  notes.find(id, (err) => {
+    console.log(`find id: ${id}`);
+    console.log(`find err: ${err}`);
+    if (err !== null) {
+      return next(err);
+    }
 
-
-// ERROR HANDLING =============================================
-router.use(function (req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  res.status(404).json({ message: 'Not Found' });
-});
-
-router.use(function (err, req, res, next) {
-  res.status(err.status || 500);
-  res.json({
-    message: err.message,
-    error: err,
+    notes.delete(id, (err, length) => {
+      console.log(`err: ${err}, length: ${length}`);
+      if (err !== null) {
+        return next(err);
+      } else if (length !== 1) {
+        return next(err);
+      }
+      res.status(204).json({ message: 'No Content' });
+    });
   });
 });
+
 
 module.exports = router;
