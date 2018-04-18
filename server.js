@@ -6,6 +6,7 @@ console.log('Hello Noteful!');
 
 // import express
 const express = require('express');
+const morgan = require('morgan'); // import morgan logger
 
 // Import data
 // Simple In-Memory DataBase
@@ -16,12 +17,14 @@ const notes = simDB.initialize(data);
 
 // Import the PORT module
 const { PORT } = require('./config');
-const { logger } = require('./public/middleware/logger.js');
+
 // Init a new express app
 const app = express();
 
-// Use the logger module
-app.use(logger);
+// Use the morgan logger module
+// pass 'dev' to morgan, as a parameter, to use the predefined format
+app.use(morgan('dev'));
+
 // Tell node to use the express.static built-in middleware
 app.use(express.static('public'));
 // Parse request body
