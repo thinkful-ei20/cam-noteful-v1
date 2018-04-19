@@ -1,9 +1,12 @@
 'use strict';
 
+// access to express so we can get to the router
 const express = require('express');
-
 const router = express.Router();
+// shorthand code:
+// const router = require('express').Router();
 
+// Database initialization
 const data = require('../db/notes'); // Database
 const simDB = require('../db/simDB');  // Database methods
 const notes = simDB.initialize(data);
@@ -33,7 +36,6 @@ router.get('/notes/:id', (req, res, next) => {
     res.json(item); 
   });
 });
-
 
 // ==== PUT =================================================
 // Use the PUT method on the route api/notes/:id, then use the callback function with 3 params, req ,res, and next
@@ -86,6 +88,10 @@ router.post('/notes', (req, res, next) => {
       return next(err);
     }
     if (item) {
+      // create process needs to return a 201 status
+      // Part of the standard guidelines for RESTful api's
+      // creates a header that has the location of (item)
+      // passes back to the client so they know where to find it for later reference
       res.location(`http://${req.headers.host}/notes/${item.id}`).status(201).json(item);
     } else {
       next();
@@ -106,11 +112,12 @@ router.delete('/notes/:id', (req, res, next) => {
     notes.delete(id, (err, length) => {
       console.log(`err: ${err}, length: ${length}`);
       if (err !== null) {
-        return next(err);
+        return next(err); // goes to error handler
       } else if (length !== 1) {
         return next(err);
       }
-      res.status(204).json({ message: 'No Content' });
+      res.sendStatus(204);
+      res.status(204).json({ message: 'No Content' }).end();
     });
   });
 });

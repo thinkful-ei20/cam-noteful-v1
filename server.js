@@ -6,13 +6,6 @@ console.log('Hello Noteful!');
 const express = require('express');
 const morgan = require('morgan'); // import morgan logger
 
-// Import data
-// Simple In-Memory DataBase
-// const data = require('./db/notes'); // Database
-// const simDB = require('./db/simDB');  // Database methods
-// const notes = simDB.initialize(data);
-
-
 // Import the PORT module
 const { PORT } = require('./config');
 
