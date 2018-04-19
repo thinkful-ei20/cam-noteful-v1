@@ -47,7 +47,7 @@ router.get('/notes/:id', (req, res, next) => {
       }
       // If the promise fails(rejects)
     }).catch(err => {
-      next(err); // move to next error handler
+      return next(err); // move to next error handler
     });
 });
 
@@ -107,21 +107,6 @@ router.post('/notes', (req, res, next) => {
     }).catch(err => {
       return next(err);
     });
-
-  // notes.create(newItem, (err, item) => {
-  //   if (err) {
-  //     return next(err);
-  //   }
-  //   if (item) {
-  //     // create process needs to return a 201 status
-  //     // Part of the standard guidelines for RESTful api's
-  //     // creates a header that has the location of (item)
-  //     // passes back to the client so they know where to find it for later reference
-  //     res.location(`http://${req.headers.host}/notes/${item.id}`).status(201).json(item);
-  //   } else {
-  //     next();
-  //   }
-  // });
 });
 
 // ==== DELETE =================================================
