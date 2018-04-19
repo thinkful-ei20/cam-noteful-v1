@@ -29,12 +29,21 @@ router.get('/notes', (req, res, next) => {
 
 router.get('/notes/:id', (req, res, next) => {
   const { id } = req.params;
-  notes.find(id, (err, item) => {
-    if (item === undefined || err) { 
-      return next(err);
-    }
-    res.json(item); 
-  });
+  // moved the callback to the .then() and err to .catch();
+  notes.find(id)
+  // Promise to find the item with a matching id
+  // upon success run .then
+    .then(item => {
+      // if item condition is true
+      if (item) {
+        res.json(item); // return JSON formatted version of item
+      } else {
+        next(); // else move to the next function
+      }
+      // If the promise fails(rejects)
+    }).catch(err => {
+      next(err); // move to next error handler
+    });
 });
 
 // ==== PUT =================================================
