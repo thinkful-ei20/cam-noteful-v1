@@ -19,12 +19,6 @@ const jsonParser = bodyParser.json();
 // ==== GET =================================================
 router.get('/notes', (req, res, next) => {
   const { searchTerm } = req.query;
-  // notes.filter(searchTerm, (err, list) => {
-  //   if (list.length === 0 || err) {
-  //     return next(err); // goes to error handler
-  //   }
-  //   res.json(list); // responds with filtered array
-  // });
 
   notes.filter(searchTerm)
     .then(list => {
@@ -67,7 +61,7 @@ router.put('/notes/:id', (req, res, next) => {
   const updateObj = {};
   const updateFields = ['title', 'content'];
 
-  /// Loop over updateFields, and for Each element in the array
+  // Loop over updateFields, and for Each element in the array
   updateFields.forEach(field => {
     // if field is IN(or it's prototype chain) the request body (returns true)
     if (field in req.body) {
@@ -78,16 +72,16 @@ router.put('/notes/:id', (req, res, next) => {
 
   // ==== UPDATE =================================================
   // update method on notes
-  notes.update(id, updateObj, (err, item) => {
-    if (Object.keys(updateObj).length === 0 || err) {
+  notes.update(id, updateObj)
+    .then(item => {
+      if (id && updateObj) {
+        res.json(item);
+      } else {
+        next();
+      }
+    }).catch(err => {
       return next(err);
-    }
-    if (item) {
-      res.json(item);
-    } else {
-      next();
-    }
-  });
+    });
 });
 
 // ==== POST =================================================
