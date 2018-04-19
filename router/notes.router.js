@@ -112,25 +112,19 @@ router.post('/notes', (req, res, next) => {
 // ==== DELETE =================================================
 router.delete('/notes/:id', (req, res, next) => {
   const id = req.params.id;
-  notes.find(id, (err) => {
-    console.log(`find id: ${id}`);
-    console.log(`find err: ${err}`);
-    if (err !== null) {
-      return next(err);
-    }
 
-    notes.delete(id, (err, length) => {
-      console.log(`err: ${err}, length: ${length}`);
-      if (err !== null) {
-        return next(err); // goes to error handler
-      } else if (length !== 1) {
-        return next(err);
+  notes.delete(id)
+    .then(() => {
+      if (id) {
+        res.status(204).end();
+      } else {
+        next();
       }
-      res.sendStatus(204);
-      res.status(204).json({ message: 'No Content' }).end();
+    }).catch(err => {
+      res.status(500);
+      // res.sendStatus(500).send({ error: 'ERROR' });
+      return next(err);
     });
-  });
 });
-
 
 module.exports = router;
