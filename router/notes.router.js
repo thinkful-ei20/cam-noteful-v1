@@ -19,12 +19,23 @@ const jsonParser = bodyParser.json();
 // ==== GET =================================================
 router.get('/notes', (req, res, next) => {
   const { searchTerm } = req.query;
-  notes.filter(searchTerm, (err, list) => {
-    if (list.length === 0 || err) {
-      return next(err); // goes to error handler
-    }
-    res.json(list); // responds with filtered array
-  });
+  // notes.filter(searchTerm, (err, list) => {
+  //   if (list.length === 0 || err) {
+  //     return next(err); // goes to error handler
+  //   }
+  //   res.json(list); // responds with filtered array
+  // });
+
+  notes.filter(searchTerm)
+    .then(list => {
+      if (list) {
+        res.json(list);
+      } else {
+        next();
+      }
+    }).catch(err => {
+      return next(err);
+    });
 });
 
 router.get('/notes/:id', (req, res, next) => {
