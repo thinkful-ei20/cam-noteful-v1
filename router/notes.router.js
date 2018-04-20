@@ -113,16 +113,19 @@ router.post('/notes', (req, res, next) => {
 router.delete('/notes/:id', (req, res, next) => {
   const id = req.params.id;
 
-  notes.delete(id)
-    .then(() => {
-      if (id) {
-        res.status(204).end();
+  notes.find(id)
+    .then(note => {
+      if (note) {
+        return notes.delete(id);
       } else {
-        next();
+        throw new Error('ERROR');
       }
-    }).catch(err => {
+    })
+    .then(() => {
+      res.status(204).end();
+    })
+    .catch(err => {
       res.status(500);
-      // res.sendStatus(500).send({ error: 'ERROR' });
       return next(err);
     });
 });
