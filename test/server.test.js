@@ -89,5 +89,24 @@ describe('GET /api/notes', () => {
 
 // GET REQUEST to /api/notes/:id ===============
 describe('GET /api/notes/:id', () => {
-  
+  it('should return correct note object with id, title, and content for a given id', () => {
+    return chai.request(app)
+      .get('/api/notes/1000')
+      .then(res => {
+        // expect(res).to.have.status(200);
+        expect(res).to.be.json;
+        expect(res).to.be.an('object');
+        expect(res.body).to.include.keys('id', 'title', 'content');
+        expect(res.body.id).to.equal(1000);
+        expect(res.body.title).to.equal('5 life lessons learned from cats');
+      });
+  });
+
+  it('should respond with a 404 for an invalid id', () => {
+    return chai.request(app)
+      .get('/api/notes/9999')
+      .then(res => {
+        expect(res).to.have.status(404);
+      });
+  });
 });
