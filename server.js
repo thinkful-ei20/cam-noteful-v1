@@ -43,11 +43,15 @@ app.use(function (err, req, res, next) {
   });
 });
 
-// Starts the server and listens on PORT variable
-app.listen(PORT, () => {
+// Listen for incoming connections
+if (require.main === module) {
+  // Starts the server and listens on PORT variable
+  app.listen(PORT, () => {
   // console.info(`Server listening on ${this.address().port}`);
-  console.log('Server is listening on localhost:8080!');
-}).on('error', err => {
-  console.error(err);
-});
+    console.log('Server is listening on localhost:8080!');
+  }).on('error', err => {
+    console.error(err);
+  });
+}
 
+module.exports = app; // Export for testing
