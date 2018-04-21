@@ -110,6 +110,7 @@ describe('GET /api/notes/:id', () => {
   });
 });
 
+
 /*
 // POST REQUEST to /api/notes/ ===============
 describe('POST /api/notes', () => {
