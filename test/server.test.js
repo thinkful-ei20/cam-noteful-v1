@@ -86,7 +86,6 @@ describe('GET /api/notes', () => {
   });
 });
 
-
 // GET REQUEST to /api/notes/:id ===============
 describe('GET /api/notes/:id', () => {
   it('should return correct note object with id, title, and content for a given id', () => {
@@ -110,3 +109,22 @@ describe('GET /api/notes/:id', () => {
       });
   });
 });
+
+/*
+// POST REQUEST to /api/notes/ ===============
+describe('POST /api/notes', () => {
+  it('should create and return a new item with location header when provided valid data', () => {
+    return chai.request(app)
+      .get('/api/notes')
+      .then(res => {
+        expect(res).to.be.json;
+        expect(res).to.be.an('object');
+        expect(res).to.have.property('location');
+      });
+  });
+
+  it('should return an object with a message property \'Missing \'title\' in request body\' when missing "title" field', () => {
+
+  });
+});
+*/
